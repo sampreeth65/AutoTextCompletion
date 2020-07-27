@@ -1,13 +1,15 @@
 package AutoTextCompletion;
 
-public class Main 
+import java.util.List;
+
+public class Main
 {
 	public static void main(String[] args) 
 	{
-		AutoTextCompletion.Trie trie = new AutoTextCompletion.Trie();
-		trie.insert("Hello");
-		System.out.println(trie.contains("Hello"));
-
+		ReadFile read = new ReadFile();
+		List<String> list = read.findWord("Hello");
+		for (String word : list)
+			System.out.println(word);
 	}
 
 }

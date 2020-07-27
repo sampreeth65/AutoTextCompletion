@@ -1,9 +1,8 @@
 package AutoTextCompletion;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-
-
-
+import java.util.List;
 
 public class Trie 
 {
@@ -32,6 +31,11 @@ public class Trie
         {
             return children.get(character);
         }
+
+		public Node[] getChildren()
+		{
+			return children.values().toArray(new Node[0]);
+		}
         
         @Override
         public String toString() 
@@ -79,5 +83,48 @@ public class Trie
 
 		root = root.getChild(word.charAt(index));
 		return contains(root,word,index + 1);
+	}
+
+	public List<String> findWord(String word)
+	{
+		List<String> words = new ArrayList<>();
+
+		if (word == null)
+			return words;
+
+		if (word.length() == 0)
+			return words;
+
+		Node lastNode = findLastNode(word);
+
+		findWords(lastNode,word,words);
+
+		return words;
+	}
+
+	private void findWords(Node root,String prefix,List<String> words)
+	{
+		if (root == null)
+			return;
+
+		if (root.isEndOfWord)
+			words.add(prefix);
+
+		for (Node child: root.getChildren())
+			findWords(child,prefix + child.character,words);
+	}
+
+	private Node findLastNode(String prefix)
+	{
+		Node currentNode = root;
+
+		for(char character: prefix.toCharArray())
+		{
+			Node child = currentNode.getChild(character);
+			if (child == null)
+				return null;
+			currentNode = child;
+		}
+		return currentNode;
 	}
 }
